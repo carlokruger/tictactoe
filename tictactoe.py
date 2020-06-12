@@ -137,28 +137,27 @@ create_gameboard()
 # Take in new X
 while True:
     text_in = input("Enter the coordinates: ")
-    if len(text_in.split()) < 2:
-        print("Enter two numbers")
-    else:
-        x, y = text_in.split()
-
-    if not x.isnumeric() or not y.isnumeric():
+    if len(text_in.split()) != 2 or text_in.replace(" ", "").isdigit() is False:
         print("You should enter numbers!")
 
     else:
+        x, y = text_in.split()
         x = int(x)
         y = int(y)
-        cell = (x - 1) + (9 - (3 * y))
-        new_xy = num_matrix[cell]
-        new_x = int(new_xy[0])
-        new_y = int(new_xy[1])
+        if 1 <= x <= 3 and 1 <= y <= 3:
+            cell = (x - 1) + (9 - (3 * y))
+            new_xy = num_matrix[cell]
+            new_x = int(new_xy[0])
+            new_y = int(new_xy[1])
+        else:
+            print("Numbers should be between 1 and 3")
 
-    if rows[new_x][new_y] != "_":
-        print("This cell is occupied! Choose another one!")
-    elif rows[new_x][new_y] == "_":
-        rows[new_x][new_y] = "X"
-        create_columns()
-        create_diags()
-        create_gameboard()
-        print_gameboard()
-        break
+            if rows[new_x][new_y] != "_":
+                print("This cell is occupied! Choose another one!")
+            elif rows[new_x][new_y] == "_":
+                rows[new_x][new_y] = "X"
+                create_columns()
+                create_diags()
+                create_gameboard()
+                print_gameboard()
+                break
