@@ -1,103 +1,164 @@
 # write your code here
-matrix = input("Enter cell: ")
-print("---------")
-print(f"| {matrix[0]} {matrix[1]} {matrix[2]} |")
-print(f"| {matrix[3]} {matrix[4]} {matrix[5]} |")
-print(f"| {matrix[6]} {matrix[7]} {matrix[8]} |")
-print("---------")
+rows = list()
+columns = []
+diags = []
+game_board = []
+x_winner = ["X", "X", "X"]
+o_winner = ["O", "O", "O"]
+x_wins = 0
+o_wins = 0
+x_s = 0
+o_s = 0
+spaces = 0
+row_1 = []
+row_2 = []
+row_3 = []
+init_matrix = ""
+current_state = ""
+current_player = "X"
 
-row_1 = (matrix[0], matrix[1], matrix[2])
-row_2 = (matrix[3], matrix[4], matrix[5])
-row_3 = (matrix[6], matrix[7], matrix[8])
-col_1 = (matrix[0], matrix[3], matrix[6])
-col_2 = (matrix[1], matrix[4], matrix[7])
-col_3 = (matrix[2], matrix[5], matrix[8])
-diag_1 = (matrix[0], matrix[4], matrix[8])
-diag_2 = (matrix[6], matrix[4], matrix[2])
+num_matrix = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
 
-def win_test(threes):
-    if "".join(threes) == "XXX":
-        return "X"
-    elif "".join(threes) == "OOO":
-        return "O"
-    elif "_" in "".join(threes):
-        return "_"
 
-x_wins = []
-o_wins = []
-open_cell = []
+def create_init_state():
 
-if win_test(row_1) == "X":
-    x_wins.append("X")
-elif win_test(row_1) == "O":
-    o_wins.append("O")
-elif win_test(row_1) == "_":
-    open_cell.append("_")
+    global init_matrix
+    global row_1
+    global row_2
+    global row_3
 
-if win_test(row_2) == "X":
-    x_wins.append("X")
-elif win_test(row_2) == "O":
-    o_wins.append("O")
-elif win_test(row_2) == "_":
-    open_cell.append("_")
+    init_matrix = input("Enter cells: ")
+    row_1 = [init_matrix[0], init_matrix[1], init_matrix[2]]
+    row_2 = [init_matrix[3], init_matrix[4], init_matrix[5]]
+    row_3 = [init_matrix[6], init_matrix[7], init_matrix[8]]
 
-if win_test(row_3) == "X":
-    x_wins.append("X")
-elif win_test(row_3) == "O":
-    o_wins.append("O")
-elif win_test(row_3) == "_":
-    open_cell.append("_")
 
-if win_test(col_1) == "X":
-    x_wins.append("X")
-elif win_test(col_1) == "O":
-    o_wins.append("O")
-elif win_test(col_1) == "_":
-    open_cell.append("_")
+def create_rows():
+    global row_1
+    global row_2
+    global row_3
+    global rows
+    rows.append(row_1)
+    rows.append(row_2)
+    rows.append(row_3)
 
-if win_test(col_2) == "X":
-    x_wins.append("X")
-elif win_test(col_2) == "O":
-    o_wins.append("O")
-elif win_test(col_2) == "_":
-    open_cell.append("_")
 
-if win_test(col_3) == "X":
-    x_wins.append("X")
-elif win_test(col_3) == "O":
-    o_wins.append("O")
-elif win_test(col_3) == "_":
-    open_cell.append("_")
+def print_gameboard():
+    global rows
 
-if win_test(diag_1) == "X":
-    x_wins.append("X")
-elif win_test(diag_1) == "O":
-    o_wins.append("O")
-elif win_test(diag_1) == "_":
-    open_cell.append("_")
+    print("---------")
+    print(f"| {rows[0][0]} {rows[0][1]} {rows[0][2]} |")
+    print(f"| {rows[1][0]} {rows[1][1]} {rows[1][2]} |")
+    print(f"| {rows[2][0]} {rows[2][1]} {rows[2][2]} |")
+    print("---------")
 
-if win_test(diag_2) == "X":
-    x_wins.append("X")
-elif win_test(diag_2) == "O":
-    o_wins.append("O")
-elif win_test(diag_2) == "_":
-    open_cell.append("_")
 
-#print(len(x_wins))
-#print(len(o_wins))
-#print(open_cell)
+def create_columns():
+    global rows
+    global columns
+    columns = [
+        [rows[0][0], rows[1][0], rows[2][0]],
+        [rows[0][1], rows[1][1], rows[2][1]],
+        [rows[0][2], rows[1][2], rows[2][2]]
+    ]
 
-if len(x_wins) > 0 and len(o_wins) > 0 and len(open_cell) >= 0:
-    print("Impossible")
-elif matrix.count("X") > matrix.count("O") + 1:
-    print("Impossible")
-elif matrix.count("O") > matrix.count("X") + 1:
-    print("Impossible")
-elif len(x_wins) == 0 and len(o_wins) == 0 and len(open_cell) == 0:
-    print("Draw")
-elif len(x_wins) == 0 and len(o_wins) == 0 and len(open_cell) > 0:
-    print("Game not finished")
-elif len(x_wins) == 1 and len(o_wins) == 0 and len(open_cell) >= 0:
-    print("X wins")
-elif len(x_wins) == 0 and len(o_wins) == 1 and len(open_cell) >= 0:
-    print("O wins")
+
+def create_diags():
+    global rows
+    global diags
+    diags = [[rows[0][0], rows[1][1], rows[2][2]],
+             [rows[2][0], rows[1][1], rows[0][2]]]
+
+
+def create_gameboard():
+    global game_board
+    global rows
+    global columns
+    global diags
+    game_board = [rows] + [columns] + [diags]
+
+
+def count_winners():
+    global game_board
+    global x_winner
+    global o_winner
+    global x_wins
+    global o_wins
+    global spaces
+    global x_s
+    global o_s
+
+    x_wins = game_board.count(x_winner)
+    o_wins = game_board.count(o_winner)
+    spaces = game_board.count("_")
+    x_s = game_board.count("X")
+    o_s = game_board.count("O")
+
+
+def check_game_state():
+    global x_wins
+    global o_wins
+    global spaces
+    global x_s
+    global o_s
+    global current_state
+
+    if x_wins == 1 and o_wins == 0:
+        current_state = "X wins"
+
+    elif o_wins == 1 and x_wins == 0:
+        current_state = "O wins"
+
+    elif spaces > 0 and o_wins == 0 and x_wins == 0:
+        current_state = "Game not finished"
+
+    elif x_wins > 0 and o_wins > 0:
+        current_state = "Impossible"
+
+    elif (x_s > o_s + 1) or (o_s > x_s + 1):
+        current_state = "Impossible"
+
+    elif x_wins == 0 and o_wins == 0 and spaces == 0:
+        current_state = "Draw"
+
+    return current_state
+
+
+# Deal with initial setup
+create_init_state()
+create_rows()
+print_gameboard()
+
+# setup game board
+create_columns()
+create_diags()
+create_gameboard()
+
+# Take in new X
+while True:
+    text_in = input("Enter the coordinates: ")
+    if len(text_in.split()) < 2:
+        print("Enter two numbers")
+    else:
+        x, y = text_in.split()
+
+    if not x.isnumeric() or not y.isnumeric():
+        print("You should enter numbers!")
+
+    else:
+        x = int(x)
+        y = int(y)
+        cell = (x - 1) + (9 - (3 * y))
+        new_xy = num_matrix[cell]
+        new_x = int(new_xy[0])
+        new_y = int(new_xy[1])
+
+    if rows[new_x][new_y] != "_":
+        print("This cell is occupied! Choose another one!")
+    elif rows[new_x][new_y] == "_":
+        rows[new_x][new_y] = "X"
+        create_columns()
+        create_diags()
+        create_gameboard()
+        print_gameboard()
+        break
