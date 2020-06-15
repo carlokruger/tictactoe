@@ -3,8 +3,8 @@ rows = list()
 columns = []
 diags = []
 game_board = []
-x_winner = ["X", "X", "X"]
-o_winner = ["O", "O", "O"]
+x_winner = "XXX"
+o_winner = "OOO"
 x_wins = 0
 o_wins = 0
 x_s = 0
@@ -13,7 +13,7 @@ spaces = 0
 row_1 = []
 row_2 = []
 row_3 = []
-init_matrix = ""
+init_matrix = "_________"
 current_state = ""
 current_player = "X"
 
@@ -27,7 +27,7 @@ def create_init_state():
     global row_2
     global row_3
 
-    init_matrix = input("Enter cells: ")
+    #  init_matrix = input("Enter cells: ")
     row_1 = [init_matrix[0], init_matrix[1], init_matrix[2]]
     row_2 = [init_matrix[3], init_matrix[4], init_matrix[5]]
     row_3 = [init_matrix[6], init_matrix[7], init_matrix[8]]
@@ -79,7 +79,9 @@ def create_gameboard():
 
 
 def count_winners():
-    global game_board
+    global row_1
+    global row_2
+    global row_3
     global x_winner
     global o_winner
     global x_wins
@@ -88,11 +90,19 @@ def count_winners():
     global x_s
     global o_s
 
-    x_wins = game_board.count(x_winner)
-    o_wins = game_board.count(o_winner)
-    spaces = game_board.count("_")
-    x_s = game_board.count("X")
-    o_s = game_board.count("O")
+    x_wins = "".join(row_1).count(x_winner) + "".join(row_2).count(x_winner) \
+             + "".join(row_3).count(x_winner) + "".join(columns[0]).count(x_winner) \
+             + "".join(columns[1]).count(x_winner) + "".join(columns[2]).count(x_winner) \
+             + "".join(diags[0]).count(x_winner) + "".join(diags[1]).count(x_winner)
+
+    o_wins = "".join(row_1).count(o_winner) + "".join(row_2).count(o_winner) \
+             + "".join(row_3).count(o_winner) + "".join(columns[0]).count(o_winner) \
+             + "".join(columns[1]).count(o_winner) + "".join(columns[2]).count(o_winner) \
+             + "".join(diags[0]).count(o_winner) + "".join(diags[1]).count(o_winner)
+
+    spaces = row_1.count("_") + row_2.count("_") + row_3.count("_")
+    x_s = row_1.count("X") + row_2.count("X") + row_3.count("X")
+    o_s = row_1.count("O") + row_2.count("O") + row_3.count("O")
 
 
 def check_game_state():
@@ -173,8 +183,16 @@ while True:
             create_diags()
             create_gameboard()
             print_gameboard()
+            count_winners()
+
+            if "win" in check_game_state() or "Draw" in check_game_state():
+                print(current_state)
+                break
+            elif "Impossible" in check_game_state():
+                print(current_state)
+                break
+
             if current_player == "X":
                 current_player = "O"
             else:
                 current_player = "X"
-            break
