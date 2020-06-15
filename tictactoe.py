@@ -123,6 +123,19 @@ def check_game_state():
 
     return current_state
 
+def is_two_digits(some_text):
+    if some_text.replace(" ", "").isdigit() and len(some_text.replace(" ", "")) == 2:
+        return True
+    else:
+        return False
+
+def is_in_coords(some_text):
+    if 1 <= int(some_text.replace(" ", "")[0]) <= 3 \
+            and 1 <= int(some_text.replace(" ", "")[1]) <= 3:
+        return True
+    else:
+        return False
+
 
 # Deal with initial setup
 create_init_state()
@@ -137,27 +150,31 @@ create_gameboard()
 # Take in new X
 while True:
     text_in = input("Enter the coordinates: ")
-    if len(text_in.split()) != 2 or text_in.replace(" ", "").isdigit() is False:
+    if not is_two_digits(text_in):
         print("You should enter numbers!")
 
-    else:
+    elif not is_in_coords(text_in):
+        print("Coordinates should be from 1 to 3!")
+
+    elif is_two_digits(text_in) and is_in_coords(text_in):
         x, y = text_in.split()
         x = int(x)
         y = int(y)
-        if 1 <= x <= 3 and 1 <= y <= 3:
-            cell = (x - 1) + (9 - (3 * y))
-            new_xy = num_matrix[cell]
-            new_x = int(new_xy[0])
-            new_y = int(new_xy[1])
-        else:
-            print("Numbers should be between 1 and 3")
+        cell = (x - 1) + (9 - (3 * y))
+        new_xy = num_matrix[cell]
+        new_x = int(new_xy[0])
+        new_y = int(new_xy[1])
 
-            if rows[new_x][new_y] != "_":
-                print("This cell is occupied! Choose another one!")
-            elif rows[new_x][new_y] == "_":
-                rows[new_x][new_y] = "X"
-                create_columns()
-                create_diags()
-                create_gameboard()
-                print_gameboard()
-                break
+        if rows[new_x][new_y] != "_":
+            print("This cell is occupied! Choose another one!")
+        elif rows[new_x][new_y] == "_":
+            rows[new_x][new_y] = current_player
+            create_columns()
+            create_diags()
+            create_gameboard()
+            print_gameboard()
+            if current_player == "X":
+                current_player = "O"
+            else:
+                current_player = "X"
+            break
